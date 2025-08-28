@@ -11,6 +11,7 @@ public class PropertyValue{
         this.value = value;
     }
 
+
     public String getType() {
         return this.type;
     }
