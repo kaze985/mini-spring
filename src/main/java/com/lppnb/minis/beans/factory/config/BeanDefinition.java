@@ -7,14 +7,11 @@ import com.lppnb.minis.beans.PropertyValues;
 public class BeanDefinition {
     String SCOPE_SINGLETON = "singleton";
     String SCOPE_PROTOTYPE = "prototype";
-
-    private boolean lazyInit = false;
+    private boolean lazyInit = true;
     private String[] dependsOn;
     private ArgumentValues constructorArgumentValues;
-
     private PropertyValues propertyValues;
     private String initMethodName;
-
     private volatile Object beanClass;
     private String id;
     private String className;
