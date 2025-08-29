@@ -5,37 +5,36 @@ import java.util.List;
 
 import org.dom4j.Element;
 
-import com.lppnb.minis.beans.ArgumentValue;
-import com.lppnb.minis.beans.ArgumentValues;
+import com.lppnb.minis.beans.factory.config.ConstructorArgumentValue;
+import com.lppnb.minis.beans.factory.config.ConstructorArgumentValues;
 import com.lppnb.minis.beans.PropertyValue;
 import com.lppnb.minis.beans.PropertyValues;
-import com.lppnb.minis.beans.factory.SimpleBeanFactory;
+import com.lppnb.minis.beans.factory.support.AbstractBeanFactory;
 import com.lppnb.minis.beans.factory.config.BeanDefinition;
 import com.lppnb.minis.core.Resource;
 
 public class XmlBeanDefinitionReader {
-    SimpleBeanFactory bf;
-
-    public XmlBeanDefinitionReader(SimpleBeanFactory bf) {
+    AbstractBeanFactory bf;
+    public XmlBeanDefinitionReader(AbstractBeanFactory bf) {
         this.bf = bf;
     }
-
     public void loadBeanDefinitions(Resource res) {
         while (res.hasNext()) {
-            Element element = (Element) res.next();
-            String beanID = element.attributeValue("id");
-            String beanClassName = element.attributeValue("class");
+            Element element = (Element)res.next();
+            String beanID=element.attributeValue("id");
+            String beanClassName=element.attributeValue("class");
+            String initMethodName=element.attributeValue("init-method");
 
-            BeanDefinition beanDefinition = new BeanDefinition(beanID, beanClassName);
+            BeanDefinition beanDefinition=new BeanDefinition(beanID,beanClassName);
 
             //get constructor
             List<Element> constructorElements = element.elements("constructor-arg");
-            ArgumentValues AVS = new ArgumentValues();
+            ConstructorArgumentValues AVS = new ConstructorArgumentValues();
             for (Element e : constructorElements) {
                 String pType = e.attributeValue("type");
                 String pName = e.attributeValue("name");
                 String pValue = e.attributeValue("value");
-                AVS.addArgumentValue(new ArgumentValue(pType, pName, pValue));
+                AVS.addArgumentValue(new ConstructorArgumentValue(pType,pName,pValue));
             }
             beanDefinition.setConstructorArgumentValues(AVS);
             //end of handle constructor
@@ -66,7 +65,12 @@ public class XmlBeanDefinitionReader {
             beanDefinition.setDependsOn(refArray);
             //end of handle properties
 
-            this.bf.registerBeanDefinition(beanID, beanDefinition);
+            beanDefinition.setInitMethodName(initMethodName);
+
+            this.bf.registerBeanDefinition(beanID,beanDefinition);
         }
     }
+
+
+
 }

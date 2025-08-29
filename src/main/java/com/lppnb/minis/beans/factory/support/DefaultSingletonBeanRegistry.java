@@ -1,9 +1,11 @@
-package com.lppnb.minis.beans;
+package com.lppnb.minis.beans.factory.support;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import com.lppnb.minis.beans.factory.config.SingletonBeanRegistry;
 
 public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
     protected List<String> beanNames = new ArrayList<>();

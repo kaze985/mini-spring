@@ -1,4 +1,4 @@
-package com.lppnb.minis.beans;
+package com.lppnb.minis.beans.factory.support;
 
 import com.lppnb.minis.beans.factory.config.BeanDefinition;
 

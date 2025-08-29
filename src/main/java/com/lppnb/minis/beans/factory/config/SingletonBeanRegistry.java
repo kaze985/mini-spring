@@ -1,4 +1,4 @@
-package com.lppnb.minis.beans;
+package com.lppnb.minis.beans.factory.config;
 
 public interface SingletonBeanRegistry {
     void registerSingleton(String beanName, Object singletonObject);
