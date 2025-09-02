@@ -4,16 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.lppnb.minis.beans.BeansException;
-import com.lppnb.minis.beans.factory.BeanFactory;
 import com.lppnb.minis.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
-import com.lppnb.minis.beans.factory.config.AutowireCapableBeanFactory;
 import com.lppnb.minis.beans.factory.config.BeanFactoryPostProcessor;
+import com.lppnb.minis.beans.factory.config.ConfigurableListableBeanFactory;
+import com.lppnb.minis.beans.factory.support.DefaultListableBeanFactory;
 import com.lppnb.minis.beans.factory.xml.XmlBeanDefinitionReader;
 import com.lppnb.minis.core.ClassPathXmlResource;
 import com.lppnb.minis.core.Resource;
 
-public class ClassPathXmlApplicationContext implements BeanFactory,ApplicationEventPublisher{
-    AutowireCapableBeanFactory beanFactory;
+public class ClassPathXmlApplicationContext extends AbstractApplicationContext{
+    DefaultListableBeanFactory beanFactory;
     private final List<BeanFactoryPostProcessor> beanFactoryPostProcessors =
             new ArrayList<BeanFactoryPostProcessor>();
 
@@ -23,7 +23,7 @@ public class ClassPathXmlApplicationContext implements BeanFactory,ApplicationEv
 
     public ClassPathXmlApplicationContext(String fileName, boolean isRefresh){
         Resource res = new ClassPathXmlResource(fileName);
-        AutowireCapableBeanFactory bf = new AutowireCapableBeanFactory();
+        DefaultListableBeanFactory bf = new DefaultListableBeanFactory();
         XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(bf);
         reader.loadBeanDefinitions(res);
 
@@ -41,65 +41,54 @@ public class ClassPathXmlApplicationContext implements BeanFactory,ApplicationEv
     }
 
     @Override
-    public Object getBean(String beanName) throws BeansException {
-        return this.beanFactory.getBean(beanName);
+    void registerListeners() {
+        ApplicationListener listener = new ApplicationListener();
+        this.getApplicationEventPublisher().addApplicationListener(listener);
+
     }
 
     @Override
-    public boolean containsBean(String name) {
-        return this.beanFactory.containsBean(name);
+    void initApplicationEventPublisher() {
+        ApplicationEventPublisher aep = new SimpleApplicationEventPublisher();
+        this.setApplicationEventPublisher(aep);
     }
 
-    public void registerBean(String beanName, Object obj) {
-        this.beanFactory.registerBean(beanName, obj);
+    @Override
+    void postProcessBeanFactory(ConfigurableListableBeanFactory bf) {
+    }
+
+    @Override
+    void registerBeanPostProcessors(ConfigurableListableBeanFactory bf) {
+        this.beanFactory.addBeanPostProcessor(new AutowiredAnnotationBeanPostProcessor());
+    }
+
+    @Override
+    void onRefresh() {
+        this.beanFactory.refresh();
+    }
+
+    @Override
+    public ConfigurableListableBeanFactory getBeanFactory() throws IllegalStateException {
+        return this.beanFactory;
+    }
+
+    @Override
+    public void addApplicationListener(ApplicationListener listener) {
+        this.getApplicationEventPublisher().addApplicationListener(listener);
+
+    }
+
+    @Override
+    void finishRefresh() {
+        publishEvent(new ContextRefreshEvent("Context Refreshed..."));
+
     }
 
     @Override
     public void publishEvent(ApplicationEvent event) {
+        this.getApplicationEventPublisher().publishEvent(event);
+
     }
 
-    @Override
-    public boolean isSingleton(String name) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public boolean isPrototype(String name) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public Class<?> getType(String name) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public List<BeanFactoryPostProcessor> getBeanFactoryPostProcessors() {
-        return this.beanFactoryPostProcessors;
-    }
-
-    public void addBeanFactoryPostProcessor(BeanFactoryPostProcessor postProcessor) {
-        this.beanFactoryPostProcessors.add(postProcessor);
-    }
-
-    public void refresh() throws BeansException, IllegalStateException {
-        // Register bean processors that intercept bean creation.
-        registerBeanPostProcessors(this.beanFactory);
-
-        // Initialize other special beans in specific context subclasses.
-        onRefresh();
-    }
-
-    private void registerBeanPostProcessors(AutowireCapableBeanFactory bf) {
-        //if (supportAutowire) {
-        bf.addBeanPostProcessor(new AutowiredAnnotationBeanPostProcessor());
-        //}
-    }
-
-    private void onRefresh() {
-        this.beanFactory.refresh();
-    }
 
 }

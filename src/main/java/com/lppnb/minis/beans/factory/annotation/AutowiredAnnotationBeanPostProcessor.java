@@ -3,17 +3,17 @@ package com.lppnb.minis.beans.factory.annotation;
 import java.lang.reflect.Field;
 
 import com.lppnb.minis.beans.BeansException;
-import com.lppnb.minis.beans.factory.config.AutowireCapableBeanFactory;
+import com.lppnb.minis.beans.factory.BeanFactory;
 import com.lppnb.minis.beans.factory.config.BeanPostProcessor;
 
 public class AutowiredAnnotationBeanPostProcessor implements BeanPostProcessor {
-    private AutowireCapableBeanFactory beanFactory;
+    private BeanFactory beanFactory;
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         Object result = bean;
 
-        Class<?> clazz = result.getClass();
+        Class<?> clazz = bean.getClass();
         Field[] fields = clazz.getDeclaredFields();
         if(fields!=null){
             for(Field field : fields){
@@ -44,12 +44,13 @@ public class AutowiredAnnotationBeanPostProcessor implements BeanPostProcessor {
         return null;
     }
 
-    public AutowireCapableBeanFactory getBeanFactory() {
+    public BeanFactory getBeanFactory() {
         return beanFactory;
     }
 
-    public void setBeanFactory(AutowireCapableBeanFactory beanFactory) {
+    public void setBeanFactory(BeanFactory beanFactory) {
         this.beanFactory = beanFactory;
     }
+
 
 }
