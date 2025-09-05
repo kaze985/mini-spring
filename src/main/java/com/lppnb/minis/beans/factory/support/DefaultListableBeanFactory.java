@@ -11,7 +11,12 @@ import com.lppnb.minis.beans.factory.config.BeanDefinition;
 import com.lppnb.minis.beans.factory.config.ConfigurableListableBeanFactory;
 
 public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFactory
-        implements ConfigurableListableBeanFactory{
+        implements ConfigurableListableBeanFactory {
+    ConfigurableListableBeanFactory parentBeanFctory;
+
+    public void setParent(ConfigurableListableBeanFactory beanFactory) {
+        this.parentBeanFctory = beanFactory;
+    }
 
     @Override
     public int getBeanDefinitionCount() {
@@ -33,8 +38,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
             Class<?> classToMatch = mbd.getClass();
             if (type.isAssignableFrom(classToMatch)) {
                 matchFound = true;
-            }
-            else {
+            } else {
                 matchFound = false;
             }
 

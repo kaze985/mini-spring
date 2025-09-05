@@ -12,7 +12,7 @@ import com.lppnb.minis.core.env.Environment;
 import java.util.Map;
 
 
-public abstract class AbstractApplicationContext implements ApplicationContext {
+public abstract class AbstractApplicationContext implements ApplicationContext{
     private Environment environment;
 
     private final List<BeanFactoryPostProcessor> beanFactoryPostProcessors = new ArrayList<>();
@@ -20,6 +20,7 @@ public abstract class AbstractApplicationContext implements ApplicationContext {
     private final AtomicBoolean active = new AtomicBoolean();
     private final AtomicBoolean closed = new AtomicBoolean();
     private ApplicationEventPublisher applicationEventPublisher;
+
 
 
     @Override
@@ -70,17 +71,12 @@ public abstract class AbstractApplicationContext implements ApplicationContext {
         finishRefresh();
     }
 
-    abstract void registerListeners();
-
-    abstract void initApplicationEventPublisher();
-
-    abstract void postProcessBeanFactory(ConfigurableListableBeanFactory bf);
-
-    abstract void registerBeanPostProcessors(ConfigurableListableBeanFactory bf);
-
-    abstract void onRefresh();
-
-    abstract void finishRefresh();
+    public abstract void registerListeners();
+    public abstract void initApplicationEventPublisher();
+    public abstract void postProcessBeanFactory(ConfigurableListableBeanFactory bf);
+    public abstract void registerBeanPostProcessors(ConfigurableListableBeanFactory bf);
+    public abstract void onRefresh();
+    public abstract void finishRefresh();
 
     @Override
     public void registerSingleton(String beanName, Object singletonObject) {
@@ -158,12 +154,10 @@ public abstract class AbstractApplicationContext implements ApplicationContext {
     public String getApplicationName() {
         return "";
     }
-
     @Override
     public long getStartupDate() {
         return this.startupDate;
     }
-
     @Override
     public abstract ConfigurableListableBeanFactory getBeanFactory() throws IllegalStateException;
 
