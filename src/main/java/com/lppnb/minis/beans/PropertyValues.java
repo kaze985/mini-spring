@@ -2,12 +2,20 @@ package com.lppnb.minis.beans;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class PropertyValues{
     private final List<PropertyValue> propertyValueList;
 
     public PropertyValues() {
         this.propertyValueList = new ArrayList<PropertyValue>(10);
+    }
+    public PropertyValues(Map<String, Object> map) {
+        this.propertyValueList = new ArrayList<PropertyValue>(10);
+        for (Map.Entry<String,Object> e: map.entrySet()) {
+            PropertyValue pv = new PropertyValue(e.getKey(),e.getValue());
+            this.propertyValueList.add(pv);
+        }
     }
 
     public List<PropertyValue> getPropertyValueList() {
@@ -22,9 +30,9 @@ public class PropertyValues{
         this.propertyValueList.add(pv);
     }
 
-//    public void addPropertyValue(String propertyType, String propertyName, Object propertyValue) {
-//        addPropertyValue(new PropertyValue(propertyType, propertyName, propertyValue));
-//    }
+//	public void addPropertyValue(String propertyType, String propertyName, Object propertyValue) {
+//		addPropertyValue(new PropertyValue(propertyType, propertyName, propertyValue));
+//	}
 
     public void removePropertyValue(PropertyValue pv) {
         this.propertyValueList.remove(pv);

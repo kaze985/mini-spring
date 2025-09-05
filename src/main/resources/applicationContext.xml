@@ -12,6 +12,8 @@
 	</bean>
 	<bean id="baseservice" class="com.lppnb.minis.test.BaseService"> 
 	</bean>
+	<bean id="webBindingInitializer" class="com.lppnb.minis.test.DateInitializer">
+	</bean>
 
 	
 </beans>

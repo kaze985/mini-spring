@@ -11,12 +11,8 @@ import com.lppnb.minis.beans.factory.config.BeanDefinition;
 import com.lppnb.minis.beans.factory.config.ConfigurableListableBeanFactory;
 
 public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFactory
-        implements ConfigurableListableBeanFactory {
+        implements ConfigurableListableBeanFactory{
     ConfigurableListableBeanFactory parentBeanFctory;
-
-    public void setParent(ConfigurableListableBeanFactory beanFactory) {
-        this.parentBeanFctory = beanFactory;
-    }
 
     @Override
     public int getBeanDefinitionCount() {
@@ -25,7 +21,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
     @Override
     public String[] getBeanDefinitionNames() {
-        return (String[]) this.beanDefinitionNames.toArray();
+        return (String[])this.beanDefinitionNames.toArray(new String[this.beanDefinitionNames.size()]);
     }
 
     @Override
@@ -38,7 +34,8 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
             Class<?> classToMatch = mbd.getClass();
             if (type.isAssignableFrom(classToMatch)) {
                 matchFound = true;
-            } else {
+            }
+            else {
                 matchFound = false;
             }
 
@@ -59,6 +56,20 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
             Object beanInstance = getBean(beanName);
             result.put(beanName, (T) beanInstance);
         }
+        return result;
+    }
+
+    public void setParent(ConfigurableListableBeanFactory beanFactory) {
+        this.parentBeanFctory = beanFactory;
+    }
+
+    @Override
+    public Object getBean(String beanName) throws BeansException{
+        Object result = super.getBean(beanName);
+        if (result == null) {
+            result = this.parentBeanFctory.getBean(beanName);
+        }
+
         return result;
     }
 
