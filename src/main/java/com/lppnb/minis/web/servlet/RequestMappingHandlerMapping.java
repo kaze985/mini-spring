@@ -5,6 +5,8 @@ import java.lang.reflect.Method;
 import javax.servlet.http.HttpServletRequest;
 
 import com.lppnb.minis.beans.BeansException;
+import com.lppnb.minis.web.bind.annotation.RequestMapping;
+import com.lppnb.minis.web.context.WebApplicationContext;
 import com.lppnb.minis.web.method.HandlerMethod;
 
 public class RequestMappingHandlerMapping implements HandlerMapping {
