@@ -1,4 +1,4 @@
-package com.lppnb.minis.web;
+package com.lppnb.minis.web.context.support;
 
 
 import java.io.File;
@@ -19,7 +19,9 @@ import com.lppnb.minis.context.AbstractApplicationContext;
 import com.lppnb.minis.context.ApplicationEvent;
 import com.lppnb.minis.context.ApplicationEventPublisher;
 import com.lppnb.minis.context.ApplicationListener;
+import com.lppnb.minis.context.ContextRefreshedEvent;
 import com.lppnb.minis.context.SimpleApplicationEventPublisher;
+import com.lppnb.minis.web.context.WebApplicationContext;
 
 
 
@@ -121,14 +123,26 @@ public class AnnotationConfigWebApplicationContext
 	}
 
 	@Override
-	public void addApplicationListener(ApplicationListener listener) {
+	public void addApplicationListener(ApplicationListener<?> listener) {
 		this.getApplicationEventPublisher().addApplicationListener(listener);
 	}
 
 	@Override
 	public void registerListeners() {
-		ApplicationListener listener = new ApplicationListener();
-		this.getApplicationEventPublisher().addApplicationListener(listener);
+		String[] bdNames = this.beanFactory.getBeanDefinitionNames();
+		for (String bdName : bdNames) {
+			Object bean = null;
+			try {
+				bean = getBean(bdName);
+			} catch (BeansException e1) {
+				e1.printStackTrace();
+			}
+
+			if (bean instanceof ApplicationListener) {
+				this.getApplicationEventPublisher().addApplicationListener((ApplicationListener<?>) bean);
+			}
+		}
+
 	}
 
 	@Override
@@ -153,8 +167,7 @@ public class AnnotationConfigWebApplicationContext
 
 	@Override
 	public void finishRefresh() {
-		// TODO Auto-generated method stub
-		
+		publishEvent(new ContextRefreshedEvent(this));
 	}
 
 	@Override

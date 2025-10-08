@@ -1,10 +1,11 @@
-package com.lppnb.minis.web;
+package com.lppnb.minis.web.bind;
 
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import com.lppnb.minis.beans.AbstractPropertyAccessor;
+import com.lppnb.minis.beans.BeanWrapperImpl;
 import com.lppnb.minis.beans.PropertyEditor;
 import com.lppnb.minis.beans.PropertyValues;
 import com.lppnb.minis.util.WebUtils;

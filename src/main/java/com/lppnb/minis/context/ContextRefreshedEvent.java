@@ -1,11 +1,11 @@
 package com.lppnb.minis.context;
 
-public class ContextRefreshEvent extends ApplicationEvent{
+public class ContextRefreshedEvent extends ApplicationContextEvent{
 
 	private static final long serialVersionUID = 1L;
 
-	public ContextRefreshEvent(Object arg0) {
-		super(arg0);
+	public ContextRefreshedEvent(ApplicationContext source) {
+		super(source);
 	}
 	
 	public String toString() {

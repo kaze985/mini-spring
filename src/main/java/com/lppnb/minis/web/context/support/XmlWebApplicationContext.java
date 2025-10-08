@@ -1,7 +1,8 @@
-package com.lppnb.minis.web;
+package com.lppnb.minis.web.context.support;
 
 import javax.servlet.ServletContext;
 import com.lppnb.minis.context.ClassPathXmlApplicationContext;
+import com.lppnb.minis.web.context.WebApplicationContext;
 
 public class XmlWebApplicationContext 
 					extends ClassPathXmlApplicationContext implements WebApplicationContext{

@@ -1,4 +1,4 @@
-package com.lppnb.minis.web;
+package com.lppnb.minis.web.context;
 
 import javax.servlet.ServletContext;
 

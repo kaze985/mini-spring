@@ -1,4 +1,4 @@
-package com.lppnb.minis.web.servlet;
+package com.lppnb.minis.web.method.annotation;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -7,23 +7,24 @@ import java.util.Arrays;
 import javax.servlet.http.HttpServletRequest;
 
 import com.lppnb.minis.beans.BeansException;
-import com.lppnb.minis.web.RequestMapping;
-import com.lppnb.minis.web.WebApplicationContext;
+import com.lppnb.minis.context.ApplicationContext;
+import com.lppnb.minis.context.ApplicationContextAware;
+import com.lppnb.minis.web.bind.annotation.RequestMapping;
+import com.lppnb.minis.web.context.WebApplicationContext;
+import com.lppnb.minis.web.method.HandlerMethod;
+import com.lppnb.minis.web.servlet.HandlerMapping;
 
-public class RequestMappingHandlerMapping implements HandlerMapping {
-	WebApplicationContext wac;
-	private final MappingRegistry mappingRegistry = new MappingRegistry();
+public class RequestMappingHandlerMapping implements HandlerMapping,ApplicationContextAware {
+	ApplicationContext applicationContext;
+	private MappingRegistry mappingRegistry = null;
 	
-	public RequestMappingHandlerMapping(WebApplicationContext wac) {
-		this.wac = wac;
-		
-		initMapping();
+	public RequestMappingHandlerMapping() {
 	}
 	
-    protected void initMapping() {
+    protected void initMappings() {
     	Class<?> clz = null;
     	Object obj = null;
-    	String[] controllerNames = this.wac.getBeanDefinitionNames();
+    	String[] controllerNames = this.applicationContext.getBeanDefinitionNames();
     	for (String controllerName : controllerNames) {
 			try {
 				clz = Class.forName(controllerName);
@@ -31,7 +32,7 @@ public class RequestMappingHandlerMapping implements HandlerMapping {
 				e1.printStackTrace();
 			}
 			try {
-				obj = this.wac.getBean(controllerName);
+				obj = this.applicationContext.getBean(controllerName);
 			} catch (BeansException e) {
 				e.printStackTrace();
 			}
@@ -57,6 +58,11 @@ public class RequestMappingHandlerMapping implements HandlerMapping {
 
 	@Override
 	public HandlerMethod getHandler(HttpServletRequest request) throws Exception {
+		if (this.mappingRegistry == null) { //to do initialization
+			this.mappingRegistry = new MappingRegistry();
+			initMappings();
+		}
+		
 		String sPath = request.getServletPath();
 	
 		if (!this.mappingRegistry.getUrlMappingNames().contains(sPath)) {
@@ -71,6 +77,11 @@ public class RequestMappingHandlerMapping implements HandlerMapping {
 		HandlerMethod handlerMethod = new HandlerMethod(method, obj, clz, methodName);
 		
 		return handlerMethod;
+	}
+
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		this.applicationContext = applicationContext;
 	}
 
 }

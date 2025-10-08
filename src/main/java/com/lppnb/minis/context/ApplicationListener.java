@@ -2,8 +2,6 @@ package com.lppnb.minis.context;
 
 import java.util.EventListener;
 
-public class ApplicationListener implements EventListener {
-    void onApplicationEvent(ApplicationEvent event) {
-        System.out.println(event.toString());
-    }
+public interface ApplicationListener<E extends ApplicationEvent> extends EventListener {
+	void onApplicationEvent(E event);
 }
