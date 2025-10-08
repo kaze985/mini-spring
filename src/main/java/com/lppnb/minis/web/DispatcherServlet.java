@@ -14,14 +14,12 @@ import java.util.Map;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.lppnb.minis.beans.BeansException;
 import com.lppnb.minis.beans.factory.annotation.Autowired;
-import com.test.HelloWorldBean;
 
 /**
  * Servlet implementation class DispatcherServlet
