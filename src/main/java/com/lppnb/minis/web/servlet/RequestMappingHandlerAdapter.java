@@ -7,10 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.lppnb.minis.beans.BeansException;
-import com.lppnb.minis.web.WebApplicationContext;
-import com.lppnb.minis.web.WebBindingInitializer;
-import com.lppnb.minis.web.WebDataBinder;
-import com.lppnb.minis.web.WebDataBinderFactory;
 
 public class RequestMappingHandlerAdapter implements HandlerAdapter {
 	WebApplicationContext wac = null;

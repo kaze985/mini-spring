@@ -5,10 +5,7 @@ import java.lang.reflect.Method;
 import javax.servlet.http.HttpServletRequest;
 
 import com.lppnb.minis.beans.BeansException;
-import com.lppnb.minis.web.RequestMapping;
 import com.lppnb.minis.web.method.HandlerMethod;
-
-import com.lppnb.minis.web.WebApplicationContext;
 
 public class RequestMappingHandlerMapping implements HandlerMapping {
 	WebApplicationContext wac;
