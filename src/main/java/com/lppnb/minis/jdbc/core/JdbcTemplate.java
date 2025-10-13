@@ -2,7 +2,10 @@ package com.lppnb.minis.jdbc.core;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.List;
+
 import javax.sql.DataSource;
 
 
@@ -55,22 +58,8 @@ public class JdbcTemplate {
 			con = dataSource.getConnection();
 
 			pstmt = con.prepareStatement(sql);
-			if (args != null) {
-				for (int i = 0; i < args.length; i++) {
-					Object arg = args[i];
-					if (arg instanceof String) {
-						pstmt.setString(i+1, (String)arg);
-					}
-					else if (arg instanceof Integer) {
-						pstmt.setInt(i+1, (int)arg);
-					}
-					else if (arg instanceof java.util.Date) {
-						pstmt.setDate(i+1, new java.sql.Date(((java.util.Date)arg).getTime()));
-						
-					}
-				}
-			}
-			
+			ArgumentPreparedStatementSetter argumentSetter = new ArgumentPreparedStatementSetter(args);	
+			argumentSetter.setValues(pstmt);
 			
 			return pstmtcallback.doInPreparedStatement(pstmt);
 		}
@@ -88,5 +77,36 @@ public class JdbcTemplate {
 		
 		return null;
 
+	}
+
+	public <T> List<T> query(String sql, Object[] args, RowMapper<T> rowMapper) {
+		RowMapperResultSetExtractor<T> resultExtractor = new RowMapperResultSetExtractor<>(rowMapper);
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			con = dataSource.getConnection();
+
+			pstmt = con.prepareStatement(sql);
+			ArgumentPreparedStatementSetter argumentSetter = new ArgumentPreparedStatementSetter(args);	
+			argumentSetter.setValues(pstmt);
+			rs = pstmt.executeQuery();
+			
+			return resultExtractor.extractData(rs);
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+		}
+		finally {
+			try {
+				pstmt.close();
+				con.close();
+			} catch (Exception e) {
+				
+			}
+		}
+
+		return null;
 	}
 }
