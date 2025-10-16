@@ -1,7 +1,9 @@
 package com.lppnb.minis.test.service;
 
 import com.lppnb.minis.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class BaseService {
 	@Autowired
 	private BaseBaseService bbs;
@@ -15,7 +17,7 @@ public class BaseService {
 	public BaseService() {
 	}
 	public void sayHello() {
-		System.out.print("Base Service says hello");
+		log.info("BaseService问候消息");
 		bbs.sayHello();
 	}
 	public String getHello() {

@@ -18,7 +18,9 @@ import com.lppnb.minis.beans.factory.config.BeanDefinition;
 import com.lppnb.minis.beans.factory.config.ConfigurableBeanFactory;
 import com.lppnb.minis.beans.factory.config.ConstructorArgumentValue;
 import com.lppnb.minis.beans.factory.config.ConstructorArgumentValues;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport implements ConfigurableBeanFactory,BeanDefinitionRegistry{
     protected Map<String,BeanDefinition> beanDefinitionMap=new ConcurrentHashMap<>(256);
     protected List<String> beanDefinitionNames=new ArrayList<>();
@@ -43,7 +45,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
         if (singleton == null) {
         	singleton = this.earlySingletonObjects.get(beanName);
         	if (singleton == null) {
-        		System.out.println("get bean null -------------- " + beanName);
+			log.debug("创建新的Bean实例: beanName={}", beanName);
         		BeanDefinition bd = beanDefinitionMap.get(beanName);
         		if (bd != null) {
 	            	singleton=createBean(bd);
@@ -56,7 +58,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					//beanpostprocessor
 					//step 1 : postProcessBeforeInitialization
 					singleton = applyBeanPostProcessorsBeforeInitialization(singleton, beanName);				
-System.out.println(" class proxy after bean post processor " + singleton.getClass());	
+log.debug("Bean后处理器处理后的类型: beanName={}, class={}", beanName, singleton.getClass().getSimpleName());	
 					//step 2 : init-method
 					if (bd.getInitMethodName() != null && !bd.getInitMethodName().equals("")) {
 						invokeInitMethod(bd, singleton);
@@ -75,7 +77,7 @@ System.out.println(" class proxy after bean post processor " + singleton.getClas
 				
         }
         else {
-    		System.out.println("bean exist -------------- " + beanName + "----------------"+singleton);
+			log.debug("使用已存在的Bean: beanName={}, instance={}", beanName, singleton.getClass().getSimpleName());
         	
         }
 //        if (singleton == null) {
@@ -84,11 +86,11 @@ System.out.println(" class proxy after bean post processor " + singleton.getClas
 
 		//process Factory Bean
         if (singleton instanceof FactoryBean) {
-    		System.out.println("factory bean -------------- " + beanName + "----------------"+singleton);
+			log.debug("处理FactoryBean: beanName={}, factoryBean={}", beanName, singleton.getClass().getSimpleName());
         	return this.getObjectForBeanInstance(singleton, beanName);
         }
         else {
-    		System.out.println("normal bean -------------- " + beanName + "----------------"+singleton);
+			log.debug("返回普通Bean: beanName={}, bean={}", beanName, singleton.getClass().getSimpleName());
         	
         }
         
@@ -252,7 +254,7 @@ System.out.println(" class proxy after bean post processor " + singleton.getClas
 			e.printStackTrace();
 		}
 		
-		System.out.println(bd.getId() + " bean created. " + bd.getClassName() + " : " + obj.toString());
+		log.info("Bean创建成功: beanId={}, className={}", bd.getId(), bd.getClassName());
 		
 		return obj;
 
@@ -264,7 +266,7 @@ System.out.println(" class proxy after bean post processor " + singleton.getClas
 	
 	private void handleProperties(BeanDefinition bd, Class<?> clz, Object obj) {
 		//handle properties
-		System.out.println("handle properties for bean : " + bd.getId());
+		log.debug("处理Bean属性: beanId={}", bd.getId());
 		PropertyValues propertyValues = bd.getPropertyValues();
 		if (propertyValues != null ) {
 		if (!propertyValues.isEmpty()) {

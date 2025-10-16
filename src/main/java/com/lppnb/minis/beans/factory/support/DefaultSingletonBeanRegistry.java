@@ -8,7 +8,9 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.lppnb.minis.beans.factory.config.SingletonBeanRegistry;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class DefaultSingletonBeanRegistry  implements SingletonBeanRegistry {
     protected List<String> beanNames=new ArrayList<>();
     protected Map<String, Object> singletonObjects =new ConcurrentHashMap<>(256);
@@ -26,7 +28,7 @@ public class DefaultSingletonBeanRegistry  implements SingletonBeanRegistry {
 			
 	    	this.singletonObjects.put(beanName, singletonObject);
 	    	this.beanNames.add(beanName);
-	    	System.out.println(" bean registerded............. " + beanName);
+	    	log.debug("Bean注册成功: beanName={}", beanName);
 		}
 	}
 

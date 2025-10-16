@@ -1,5 +1,8 @@
 package com.lppnb.minis.test.service;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class AServiceImpl implements AService {
 	private String name;
 	private int level;
@@ -40,7 +43,7 @@ public class AServiceImpl implements AService {
 	}
 
 	public void sayHello() {
-		System.out.print(this.property1 + "," + this.property2);
+		log.info("AService问候: property1={}, property2={}", this.property1, this.property2);
 		ref1.sayHello();
 	}
 }

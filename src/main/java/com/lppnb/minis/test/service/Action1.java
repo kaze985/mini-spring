@@ -1,16 +1,18 @@
 package com.lppnb.minis.test.service;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class Action1 implements IAction {
 
 	@Override
 	public void doAction() {
-		System.out.println("really do action1");
-		
+		log.info("执行Action1的doAction方法");
 	}
 
 	@Override
 	public void doSomething() {
-		System.out.println("really do something action1");
+		log.info("执行Action1的doSomething方法");
 	}
 
 }

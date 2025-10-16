@@ -90,7 +90,7 @@ public class AnnotationConfigWebApplicationContext
     
     private List<String> scanPackage(String packageName) {
     	List<String> tempControllerNames = new ArrayList<>();
-        URL url  =this.getClass().getClassLoader().getResource("/"+packageName.replaceAll("\\.", "/"));
+        URL url  =this.getClass().getClassLoader().getResource(packageName.replaceAll("\\.", "/"));
         File dir = new File(url.getFile());
         for (File file : dir.listFiles()) {
             if(file.isDirectory()){

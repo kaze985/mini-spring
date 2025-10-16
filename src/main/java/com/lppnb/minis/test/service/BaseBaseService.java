@@ -1,5 +1,8 @@
 package com.lppnb.minis.test.service;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class BaseBaseService {
 	private AServiceImpl as;
 	
@@ -12,11 +15,10 @@ public class BaseBaseService {
 	public BaseBaseService() {
 	}
 	public void sayHello() {
-		System.out.println("Base Base Service says hello");
-
+		log.info("BaseBaseService问候消息");
 	}
 	
 	public void init() {
-		System.out.println("..........call init-mothod..........");
+		log.info("BaseBaseService初始化方法被调用");
 	}
 }

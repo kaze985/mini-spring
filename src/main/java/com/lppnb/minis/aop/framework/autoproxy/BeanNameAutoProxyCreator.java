@@ -9,7 +9,9 @@ import com.lppnb.minis.beans.BeansException;
 import com.lppnb.minis.beans.factory.BeanFactory;
 import com.lppnb.minis.beans.factory.config.BeanPostProcessor;
 import com.lppnb.minis.util.PatternMatchUtils;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class BeanNameAutoProxyCreator implements BeanPostProcessor{
 	String pattern;
 	private BeanFactory beanFactory;
@@ -44,9 +46,9 @@ public class BeanNameAutoProxyCreator implements BeanPostProcessor{
 
 	@Override
 	public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-System.out.println(" try to create proxy for : " + beanName);		
+log.debug("尝试为Bean创建代理: beanName={}", beanName);		
 		if (isMatch(beanName, this.pattern)) {
-System.out.println(beanName + "bean name matched, " + this.pattern + " create proxy for " + bean);		
+log.info("Bean名称匹配成功，创建代理: beanName={}, pattern={}, targetClass={}", beanName, this.pattern, bean.getClass().getSimpleName());		
 //			initializeAdvisor();
 //			Object ret = getSingletonInstance(bean);
 //System.out.println(" created proxy  " + ret);	
@@ -90,7 +92,7 @@ System.out.println(beanName + "bean name matched, " + this.pattern + " create pr
 	}
 
 	protected boolean isMatch(String beanName, String mappedName) {
-System.out.println(" match?" + beanName + ":" +mappedName);		
+log.debug("检查Bean名称是否匹配: beanName={}, pattern={}", beanName, mappedName);		
 		return PatternMatchUtils.simpleMatch(mappedName, beanName);
 	}
 

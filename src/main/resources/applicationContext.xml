@@ -30,7 +30,7 @@
 	<bean id="action" class="com.lppnb.minis.test.service.Action1" />
 	<bean id="action2" class="com.lppnb.minis.test.service.Action2" />
 	
-	<bena id="beforeAdvice" class="com.lppnb.minis.test.service.MyBeforeAdvice" />
+	<bean id="beforeAdvice" class="com.lppnb.minis.test.service.MyBeforeAdvice" />
 	<bean id="advisor" class="com.lppnb.minis.aop.NameMatchMethodPointcutAdvisor">
         <property type="com.lppnb.minis.aop.Advice" name="advice" ref="beforeAdvice"/>
         <property type="String" name="mappedName" value="do*"/>
@@ -51,14 +51,14 @@
 	<property type="String" name="username" value="sa"/>
 	<property type="String" name="password" value="Sql2016"/>
     </bean> -->
-    
-    <bean id="dataSource" class="com.lppnb.minis.jdbc.pool.PooledDataSource">
-                <property name="url" value="jdbc:sqlserver://localhost:1433;databasename=DEMO"/>  
-                <property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>  
-                <property name="username" value="sa"/>  
-                <property name="password" value="Sql2016"/>  
-                <property type="int" name="initialSize" value="3"/>  
-    </bean>
+
+	<bean id="dataSource" class="com.lppnb.minis.jdbc.pool.PooledDataSource">
+		<property name="url" value="jdbc:mysql://localhost:3306/DEMO?useSSL=false&amp;serverTimezone=UTC"/>
+		<property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+		<property name="username" value="root"/>
+		<property name="password" value="your_mysql_password"/>
+		<property type="int" name="initialSize" value="3"/>
+	</bean>
        
          
 	<bean id="jdbcTemplate" class="com.lppnb.minis.jdbc.core.JdbcTemplate" >

@@ -2,11 +2,9 @@ package com.lppnb.minis.context;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import com.lppnb.minis.beans.BeansException;
-import com.lppnb.minis.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
-import com.lppnb.minis.beans.factory.config.AbstractAutowireCapableBeanFactory;
+import lombok.extern.slf4j.Slf4j;
 import com.lppnb.minis.beans.factory.config.BeanDefinition;
 import com.lppnb.minis.beans.factory.config.BeanFactoryPostProcessor;
 import com.lppnb.minis.beans.factory.config.BeanPostProcessor;
@@ -15,8 +13,8 @@ import com.lppnb.minis.beans.factory.support.DefaultListableBeanFactory;
 import com.lppnb.minis.beans.factory.xml.XmlBeanDefinitionReader;
 import com.lppnb.minis.core.ClassPathXmlResource;
 import com.lppnb.minis.core.Resource;
-import com.lppnb.minis.core.env.Environment;
 
+@Slf4j
 public class ClassPathXmlApplicationContext extends AbstractApplicationContext{
 	DefaultListableBeanFactory beanFactory;
 	private final List<BeanFactoryPostProcessor> beanFactoryPostProcessors =
@@ -38,9 +36,9 @@ public class ClassPathXmlApplicationContext extends AbstractApplicationContext{
             try {
 				refresh();
 			} catch (IllegalStateException e) {
-				e.printStackTrace();
+				log.error("应用上下文刷新时发生IllegalStateException", e);
 			} catch (BeansException e) {
-				e.printStackTrace();
+				log.error("应用上下文刷新时发生BeansException", e);
 			}
         }
     }
@@ -54,7 +52,7 @@ public class ClassPathXmlApplicationContext extends AbstractApplicationContext{
 			try {
 				bean = getBean(bdName);
 			} catch (BeansException e1) {
-				e1.printStackTrace();
+				log.warn("注册监听器时获取Bean失败: beanName={}", bdName, e1);
 			}
 
 			if (bean instanceof ApplicationListener) {
@@ -83,15 +81,16 @@ public class ClassPathXmlApplicationContext extends AbstractApplicationContext{
 			try {
 				clz = Class.forName(clzName);
 			} catch (ClassNotFoundException e1) {
-				e1.printStackTrace();
+				log.error("无法找到BeanFactoryPostProcessor类: className={}", clzName, e1);
+				continue;
 			}
 			if (BeanFactoryPostProcessor.class.isAssignableFrom(clz)) {
 					try {
 						this.beanFactoryPostProcessors.add((BeanFactoryPostProcessor) clz.newInstance());
 					} catch (InstantiationException e) {
-						e.printStackTrace();
+						log.error("实例化BeanFactoryPostProcessor失败: className={}", clzName, e);
 					} catch (IllegalAccessException e) {
-						e.printStackTrace();
+						log.error("访问BeanFactoryPostProcessor失败: className={}", clzName, e);
 					}
 			}
 		}
@@ -99,8 +98,7 @@ public class ClassPathXmlApplicationContext extends AbstractApplicationContext{
 			try {
 				processor.postProcessBeanFactory(bf);
 			} catch (BeansException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.error("BeanFactoryPostProcessor处理失败: processor={}", processor.getClass().getSimpleName(), e);
 			}
 		}
 	}
@@ -108,7 +106,7 @@ public class ClassPathXmlApplicationContext extends AbstractApplicationContext{
 	@Override
 	public
 	void registerBeanPostProcessors(ConfigurableListableBeanFactory bf) {
-System.out.println("try to registerBeanPostProcessors");		
+log.debug("开始注册BeanPostProcessor");		
 		String[] bdNames = this.beanFactory.getBeanDefinitionNames();
 		for (String bdName : bdNames) {
 			BeanDefinition bd = this.beanFactory.getBeanDefinition(bdName);
@@ -117,15 +115,16 @@ System.out.println("try to registerBeanPostProcessors");
 			try {
 				clz = Class.forName(clzName);
 			} catch (ClassNotFoundException e1) {
-				e1.printStackTrace();
+				log.error("无法找到BeanPostProcessor类: className={}", clzName, e1);
+				continue;
 			}
 			if (BeanPostProcessor.class.isAssignableFrom(clz)) {
-System.out.println(" registerBeanPostProcessors : " + clzName);		
+				log.debug("注册BeanPostProcessor: className={}", clzName);		
 					try {
 						//this.beanFactory.addBeanPostProcessor((BeanPostProcessor) clz.newInstance());
 						this.beanFactory.addBeanPostProcessor((BeanPostProcessor)(this.beanFactory.getBean(bdName)));
 					} catch (BeansException e) {
-						e.printStackTrace();
+						log.error("添加BeanPostProcessor失败: beanName={}", bdName, e);
 					}
 			}
 		}
