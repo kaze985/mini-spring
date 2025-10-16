@@ -4,10 +4,10 @@ import com.lppnb.minis.beans.BeansException;
 import com.lppnb.minis.beans.factory.BeanFactory;
 
 public interface BeanPostProcessor {
-    Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException;
+	Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException;
 
-    Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException;
-
-    void setBeanFactory(BeanFactory beanFactory);
+	Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException;
+	
+	void setBeanFactory(BeanFactory beanFactory);
 
 }

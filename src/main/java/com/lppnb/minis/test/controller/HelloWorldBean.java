@@ -12,7 +12,9 @@ import com.lppnb.minis.web.bind.annotation.RequestMapping;
 import com.lppnb.minis.web.bind.annotation.ResponseBody;
 import com.lppnb.minis.web.servlet.ModelAndView;
 import com.lppnb.minis.test.entity.User;
+import com.lppnb.minis.test.service.AService;
 import com.lppnb.minis.test.service.BaseService;
+import com.lppnb.minis.test.service.IAction;
 import com.lppnb.minis.test.service.UserService;
 
 public class HelloWorldBean {
@@ -65,5 +67,63 @@ public class HelloWorldBean {
 		int userid = Integer.parseInt(request.getParameter("id"));
 		List<User> users = userService.getUsers(userid);		
 		return users;
+	}
+	
+	@Autowired
+	IAction action;
+	
+	@RequestMapping("/testaop")
+	public void doTestAop(HttpServletRequest request, HttpServletResponse response) {
+System.out.println("testaop, call " + action.getClass());		
+		action.doAction();
+		
+		String str = "test aop, hello world!";
+		try {
+			response.getWriter().write(str);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	@RequestMapping("/testaop2")
+	public void doTestAop2(HttpServletRequest request, HttpServletResponse response) {
+		action.doSomething();
+		
+		String str = "test aop 2, hello world!";
+		try {
+			response.getWriter().write(str);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}	
+
+	@Autowired
+	IAction action2;
+	
+	@RequestMapping("/testaop3")
+	public void doTestAop3(HttpServletRequest request, HttpServletResponse response) {
+		action2.doAction();
+		
+		String str = "test aop 3, hello world!";
+		try {
+			response.getWriter().write(str);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@RequestMapping("/testaop4")
+	public void doTestAop4(HttpServletRequest request, HttpServletResponse response) {
+		action2.doSomething();
+		
+		String str = "test aop 4, hello world!";
+		try {
+			response.getWriter().write(str);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

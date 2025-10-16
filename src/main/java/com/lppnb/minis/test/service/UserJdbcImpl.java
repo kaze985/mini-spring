@@ -3,6 +3,7 @@ package com.lppnb.minis.test.service;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.lppnb.minis.jdbc.core.JdbcTemplate;
 import com.lppnb.minis.jdbc.core.OldJdbcTemplate;
 import com.lppnb.minis.test.entity.User;
 

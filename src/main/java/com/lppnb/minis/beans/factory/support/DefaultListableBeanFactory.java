@@ -10,81 +10,67 @@ import com.lppnb.minis.beans.factory.config.AbstractAutowireCapableBeanFactory;
 import com.lppnb.minis.beans.factory.config.BeanDefinition;
 import com.lppnb.minis.beans.factory.config.ConfigurableListableBeanFactory;
 
-public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFactory
-        implements ConfigurableListableBeanFactory{
-    ConfigurableListableBeanFactory parentBeanFctory;
+public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFactory 
+					implements ConfigurableListableBeanFactory{
+	ConfigurableListableBeanFactory parentBeanFctory;
+	
+	@Override
+	public int getBeanDefinitionCount() {
+		return this.beanDefinitionMap.size();
+	}
 
-    @Override
-    public int getBeanDefinitionCount() {
-        return this.beanDefinitionMap.size();
-    }
+	@Override
+	public String[] getBeanDefinitionNames() {
+		return (String[])this.beanDefinitionNames.toArray(new String[this.beanDefinitionNames.size()]);
+	}
 
-    @Override
-    public String[] getBeanDefinitionNames() {
-        return (String[])this.beanDefinitionNames.toArray(new String[this.beanDefinitionNames.size()]);
-    }
+	@Override
+	public String[] getBeanNamesForType(Class<?> type) {
+		List<String> result = new ArrayList<>();
 
-    @Override
-    public String[] getBeanNamesForType(Class<?> type) {
-        List<String> result = new ArrayList<>();
+		for (String beanName : this.beanDefinitionNames) {
+			boolean matchFound = false;
+			BeanDefinition mbd = this.getBeanDefinition(beanName);
+			Class<?> classToMatch = mbd.getClass();
+			if (type.isAssignableFrom(classToMatch)) {
+				matchFound = true;
+			}
+			else {
+				matchFound = false;
+			}
 
-        for (String beanName : this.beanDefinitionNames) {
-            boolean matchFound = false;
-            BeanDefinition mbd = this.getBeanDefinition(beanName);
-            Class<?> classToMatch = mbd.getClass();
-            if (type.isAssignableFrom(classToMatch)) {
-                matchFound = true;
-            }
-            else {
-                matchFound = false;
-            }
+			if (matchFound) {
+				result.add(beanName);
+			}
+		}
+		return (String[]) result.toArray();
 
-            if (matchFound) {
-                result.add(beanName);
-            }
-        }
-        return (String[]) result.toArray();
+	}
 
-    }
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> Map<String, T> getBeansOfType(Class<T> type) throws BeansException {
+		String[] beanNames = getBeanNamesForType(type);
+		Map<String, T> result = new LinkedHashMap<>(beanNames.length);
+		for (String beanName : beanNames) {
+			Object beanInstance = getBean(beanName);
+			result.put(beanName, (T) beanInstance);
+		}
+		return result;
+	}
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T> Map<String, T> getBeansOfType(Class<T> type) throws BeansException {
-        String[] beanNames = getBeanNamesForType(type);
-        Map<String, T> result = new LinkedHashMap<>(beanNames.length);
-        for (String beanName : beanNames) {
-            Object beanInstance = getBean(beanName);
-            result.put(beanName, (T) beanInstance);
-        }
-        return result;
-    }
-
-    public void setParent(ConfigurableListableBeanFactory beanFactory) {
-        this.parentBeanFctory = beanFactory;
-    }
-
-    @Override
+	public void setParent(ConfigurableListableBeanFactory beanFactory) {
+		this.parentBeanFctory = beanFactory;
+	}
+	
+	@Override
     public Object getBean(String beanName) throws BeansException{
-        Object result = super.getBean(beanName);
-        if (result == null) {
-            result = this.parentBeanFctory.getBean(beanName);
-        }
-
-        return result;
+    	Object result = super.getBean(beanName);
+    	if (result == null) {
+    		result = this.parentBeanFctory.getBean(beanName);
+    	}
+    	
+    	return result;
     }
 
-    @Override
-    public void registerDependentBean(String beanName, String dependentBeanName) {
-
-    }
-
-    @Override
-    public String[] getDependentBeans(String beanName) {
-        return new String[0];
-    }
-
-    @Override
-    public String[] getDependenciesForBean(String beanName) {
-        return new String[0];
-    }
 }

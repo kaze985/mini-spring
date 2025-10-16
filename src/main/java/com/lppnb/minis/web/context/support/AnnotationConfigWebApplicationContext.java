@@ -9,10 +9,12 @@ import java.util.List;
 
 import javax.servlet.ServletContext;
 
+import com.lppnb.minis.aop.framework.autoproxy.BeanNameAutoProxyCreator;
 import com.lppnb.minis.beans.BeansException;
 import com.lppnb.minis.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
 import com.lppnb.minis.beans.factory.config.BeanDefinition;
 import com.lppnb.minis.beans.factory.config.BeanFactoryPostProcessor;
+import com.lppnb.minis.beans.factory.config.BeanPostProcessor;
 import com.lppnb.minis.beans.factory.config.ConfigurableListableBeanFactory;
 import com.lppnb.minis.beans.factory.support.DefaultListableBeanFactory;
 import com.lppnb.minis.context.AbstractApplicationContext;
@@ -157,7 +159,29 @@ public class AnnotationConfigWebApplicationContext
 
 	@Override
 	public void registerBeanPostProcessors(ConfigurableListableBeanFactory bf) {
-		this.beanFactory.addBeanPostProcessor(new AutowiredAnnotationBeanPostProcessor());
+		//this.beanFactory.addBeanPostProcessor(new AutowiredAnnotationBeanPostProcessor());
+//		try {
+//			this.beanFactory.addBeanPostProcessor((BeanPostProcessor)(this.beanFactory.getBean("autoProxyCreator")));
+//		} catch (BeansException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		try {
+			this.beanFactory.addBeanPostProcessor((BeanPostProcessor)(this.beanFactory.getBean("autowiredAnnotationBeanPostProcessor")));
+		} catch (BeansException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+//		try {
+//			this.beanFactory.addBeanPostProcessor((BeanPostProcessor)(this.beanFactory.getBean("logBeanPostProcessor")));
+//		} catch (BeansException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+
+		
+		
+		
 	}
 
 	@Override

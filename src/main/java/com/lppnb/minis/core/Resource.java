@@ -2,5 +2,6 @@ package com.lppnb.minis.core;
 
 import java.util.Iterator;
 
-public interface Resource extends Iterator<Object> {
+public interface Resource extends Iterator<Object>{
+
 }

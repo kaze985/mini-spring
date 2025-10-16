@@ -1,40 +1,41 @@
 package com.lppnb.minis.beans;
 
 public class PropertyValue{
-    private final String type;
-    private final String name;
-    private final Object value;
-    private final boolean isRef;
+	private final String type;
+	private final String name;
+	private final Object value;
+	private final boolean isRef;
 
-    public PropertyValue(String type, String name, Object value, boolean isRef) {
-        this.type = type;
-        this.name = name;
-        this.value = value;
-        this.isRef = isRef;
-    }
+	public PropertyValue(String type, String name, Object value, boolean isRef) {
+		this.type = type;
+		this.name = name;
+		this.value = value;
+		this.isRef = isRef;
+	}
+	
+	public PropertyValue(String type, String name, Object value) {
+		this(type, name, value, false);
+	}
+	
+	public PropertyValue(String name, Object value) {
+		this("", name, value, false);
+	}
 
-    public PropertyValue(String type, String name, Object value) {
-        this(type, name, value, false);
-    }
+	public String getType() {
+		return this.type;
+	}
 
-    public PropertyValue(String name, Object value) {
-        this("", name, value, false);
-    }
+	public String getName() {
+		return this.name;
+	}
 
-    public String getType() {
-        return this.type;
-    }
+	public Object getValue() {
+		return this.value;
+	}
 
-    public String getName() {
-        return this.name;
-    }
-
-    public Object getValue() {
-        return this.value;
-    }
-
-    public boolean getIsRef() {
-        return isRef;
-    }
+	public boolean getIsRef() {
+		return isRef;
+	}
 
 }
+

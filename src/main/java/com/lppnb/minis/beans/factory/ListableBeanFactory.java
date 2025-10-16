@@ -6,14 +6,15 @@ import com.lppnb.minis.beans.BeansException;
 
 public interface ListableBeanFactory extends BeanFactory {
 
-    boolean containsBeanDefinition(String beanName);
+	boolean containsBeanDefinition(String beanName);
 
-    int getBeanDefinitionCount();
+	int getBeanDefinitionCount();
 
-    String[] getBeanDefinitionNames();
+	String[] getBeanDefinitionNames();
 
-    String[] getBeanNamesForType(Class<?> type);
+	String[] getBeanNamesForType(Class<?> type);
 
-    <T> Map<String, T> getBeansOfType(Class<T> type) throws BeansException;
+	<T> Map<String, T> getBeansOfType(Class<T> type) throws BeansException;
 
 }
+

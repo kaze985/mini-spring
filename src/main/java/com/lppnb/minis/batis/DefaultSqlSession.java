@@ -1,7 +1,5 @@
 package com.lppnb.minis.batis;
 
-import javax.sql.DataSource;
-
 import com.lppnb.minis.jdbc.core.JdbcTemplate;
 import com.lppnb.minis.jdbc.core.PreparedStatementCallback;
 

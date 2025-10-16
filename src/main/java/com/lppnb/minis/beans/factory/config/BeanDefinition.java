@@ -1,26 +1,23 @@
 package com.lppnb.minis.beans.factory.config;
 
-
 import com.lppnb.minis.beans.PropertyValues;
 
 public class BeanDefinition {
-    String SCOPE_SINGLETON = "singleton";
-    String SCOPE_PROTOTYPE = "prototype";
-    private boolean lazyInit = true;
-    private String[] dependsOn;
-    private ConstructorArgumentValues constructorArgumentValues;
-    private PropertyValues propertyValues;
-    private String initMethodName;
-    private volatile Object beanClass;
+	String SCOPE_SINGLETON = "singleton";
+	String SCOPE_PROTOTYPE = "prototype";
+	
+	private boolean lazyInit = true;
+	private String[] dependsOn;
+	private ConstructorArgumentValues constructorArgumentValues;
+
+	private PropertyValues propertyValues;
+	private String initMethodName;
+	
+	private volatile Object beanClass;
     private String id;
     private String className;
     private String scope=SCOPE_SINGLETON;
-
-    public BeanDefinition(String id, String className) {
-        this.id = id;
-        this.className = className;
-    }
-
+    
     public String getId() {
         return id;
     }
@@ -33,77 +30,82 @@ public class BeanDefinition {
     public void setClassName(String className) {
         this.className = className;
     }
-
-    public boolean hasBeanClass() {
-        return (this.beanClass instanceof Class);
+    
+    public BeanDefinition(String id, String className) {
+        this.id = id;
+        this.className = className;
     }
+    
+	public boolean hasBeanClass() {
+		return (this.beanClass instanceof Class);
+	}
+	
+	public void setBeanClass(Class<?> beanClass) {
+		this.beanClass = beanClass;
+	}
+	
+	public Class<?> getBeanClass(){
 
-    public void setBeanClass(Class<?> beanClass) {
-        this.beanClass = beanClass;
-    }
+		return (Class<?>) this.beanClass;
+	}
+	
+	public void setScope(String scope) {
+		this.scope = scope;
+	}
 
-    public Class<?> getBeanClass(){
+	public String getScope() {
+		return this.scope;
+	}
+	
+	public boolean isSingleton() {
+		return SCOPE_SINGLETON.equals(scope);
+	}
 
-        return (Class<?>) this.beanClass;
-    }
+	public boolean isPrototype() {
+		return SCOPE_PROTOTYPE.equals(scope);
+	}
+	
+	public void setLazyInit(boolean lazyInit) {
+		this.lazyInit = lazyInit;
+	}
 
-    public void setScope(String scope) {
-        this.scope = scope;
-    }
+	public boolean isLazyInit() {
+		return this.lazyInit;
+	}
+	
+	public void setDependsOn(String... dependsOn) {
+		this.dependsOn = dependsOn;
+	}
 
-    public String getScope() {
-        return this.scope;
-    }
+	public String[] getDependsOn() {
+		return this.dependsOn;
+	}
+	
+	public void setConstructorArgumentValues(ConstructorArgumentValues constructorArgumentValues) {
+		this.constructorArgumentValues =
+				(constructorArgumentValues != null ? constructorArgumentValues : new ConstructorArgumentValues());
+	}
 
-    public boolean isSingleton() {
-        return SCOPE_SINGLETON.equals(scope);
-    }
+	public ConstructorArgumentValues getConstructorArgumentValues() {
+		return this.constructorArgumentValues;
+	}
 
-    public boolean isPrototype() {
-        return SCOPE_PROTOTYPE.equals(scope);
-    }
+	public boolean hasConstructorArgumentValues() {
+		return !this.constructorArgumentValues.isEmpty();
+	}
+	public void setPropertyValues(PropertyValues propertyValues) {
+		this.propertyValues = (propertyValues != null ? propertyValues : new PropertyValues());
+	}
 
-    public void setLazyInit(boolean lazyInit) {
-        this.lazyInit = lazyInit;
-    }
+	public PropertyValues getPropertyValues() {
+		return this.propertyValues;
+	}
+	public void setInitMethodName(String initMethodName) {
+		this.initMethodName = initMethodName;
+	}
 
-    public boolean isLazyInit() {
-        return this.lazyInit;
-    }
-
-    public void setDependsOn(String... dependsOn) {
-        this.dependsOn = dependsOn;
-    }
-
-    public String[] getDependsOn() {
-        return this.dependsOn;
-    }
-
-    public void setConstructorArgumentValues(ConstructorArgumentValues constructorArgumentValues) {
-        this.constructorArgumentValues =
-                (constructorArgumentValues != null ? constructorArgumentValues : new ConstructorArgumentValues());
-    }
-
-    public ConstructorArgumentValues getConstructorArgumentValues() {
-        return this.constructorArgumentValues;
-    }
-
-    public boolean hasConstructorArgumentValues() {
-        return !this.constructorArgumentValues.isEmpty();
-    }
-    public void setPropertyValues(PropertyValues propertyValues) {
-        this.propertyValues = (propertyValues != null ? propertyValues : new PropertyValues());
-    }
-
-    public PropertyValues getPropertyValues() {
-        return this.propertyValues;
-    }
-    public void setInitMethodName(String initMethodName) {
-        this.initMethodName = initMethodName;
-    }
-
-    public String getInitMethodName() {
-        return this.initMethodName;
-    }
-
+	public String getInitMethodName() {
+		return this.initMethodName;
+	}
+    
 }

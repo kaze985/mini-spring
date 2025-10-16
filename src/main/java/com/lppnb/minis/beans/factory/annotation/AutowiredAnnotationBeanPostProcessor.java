@@ -4,53 +4,55 @@ import java.lang.reflect.Field;
 
 import com.lppnb.minis.beans.BeansException;
 import com.lppnb.minis.beans.factory.BeanFactory;
+import com.lppnb.minis.beans.factory.BeanFactoryAware;
 import com.lppnb.minis.beans.factory.config.BeanPostProcessor;
 
-public class AutowiredAnnotationBeanPostProcessor implements BeanPostProcessor {
-    private BeanFactory beanFactory;
+public class AutowiredAnnotationBeanPostProcessor implements BeanPostProcessor,BeanFactoryAware {
+	private BeanFactory beanFactory;
+	
+	@Override
+	public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+		Object result = bean;
+		
+		Class<?> clazz = bean.getClass();
+		Field[] fields = clazz.getDeclaredFields();
+		if(fields!=null){
+			for(Field field : fields){
+				boolean isAutowired = field.isAnnotationPresent(Autowired.class);
+				if(isAutowired){
+					String fieldName = field.getName();
+					Object autowiredObj = this.getBeanFactory().getBean(fieldName);
+					try {
+						field.setAccessible(true);
+						field.set(bean, autowiredObj);
+						System.out.println("autowire " + fieldName + " for bean " + beanName);
+						System.out.println("autowire " + fieldName + " for bean " + beanName + " : " + autowiredObj + " class : "+autowiredObj.getClass());
+					} catch (IllegalArgumentException e) {
+						e.printStackTrace();
+					} catch (IllegalAccessException e) {
+						e.printStackTrace();
+					}
 
-    @Override
-    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        Object result = bean;
+				}
+			}
+		}
+		
+		return result;
+	}
 
-        Class<?> clazz = bean.getClass();
-        Field[] fields = clazz.getDeclaredFields();
-        if(fields!=null){
-            for(Field field : fields){
-                boolean isAutowired = field.isAnnotationPresent(Autowired.class);
-                if(isAutowired){
-                    String fieldName = field.getName();
-                    Object autowiredObj = this.getBeanFactory().getBean(fieldName);
-                    try {
-                        field.setAccessible(true);
-                        field.set(bean, autowiredObj);
-                        System.out.println("autowire " + fieldName + " for bean " + beanName);
-                    } catch (IllegalArgumentException e) {
-                        e.printStackTrace();
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    }
+	@Override
+	public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+		// TODO Auto-generated method stub
+		return bean;
+	}
 
-                }
-            }
-        }
+	public BeanFactory getBeanFactory() {
+		return beanFactory;
+	}
 
-        return result;
-    }
-
-    @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public BeanFactory getBeanFactory() {
-        return beanFactory;
-    }
-
-    public void setBeanFactory(BeanFactory beanFactory) {
-        this.beanFactory = beanFactory;
-    }
+	public void setBeanFactory(BeanFactory beanFactory) {
+		this.beanFactory = beanFactory;
+	}
 
 
 }

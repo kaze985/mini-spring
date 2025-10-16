@@ -2,6 +2,8 @@ package com.lppnb.minis.test;
 
 import com.lppnb.minis.beans.BeansException;
 import com.lppnb.minis.context.ClassPathXmlApplicationContext;
+import com.lppnb.minis.test.service.AService;
+import com.lppnb.minis.test.service.BaseService;
 
 public class Test1 {
 

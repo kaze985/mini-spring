@@ -1,10 +1,11 @@
 package com.lppnb.minis.core.env;
 
 public interface Environment extends PropertyResolver {
-    String[] getActiveProfiles();
+	String[] getActiveProfiles();
 
-    String[] getDefaultProfiles();
+	String[] getDefaultProfiles();
 
-    boolean acceptsProfiles(String... profiles);
+	boolean acceptsProfiles(String... profiles);
 
 }
+
